@@ -16,29 +16,31 @@ class Bot:
         return s
     
     def _format(self, s):
+        sleep(Bot.wait)
         return colored(s, 'blue')
 
+    def _run_once(self):
+        print(self._think(self.a))
+
+    def _run_looped(self):
+        while True:
+            if self.a in ['x', 'q', 'exit', 'quit']:
+                break
+            print(self._think(self.a))
+            self.a = input()
+
     def run(self):
-        sleep(Bot.wait)
         print(self._format(self.q))
         self.a = input()
-        sleep(Bot.wait)
         if self.runtype == 'once':
-            print(self._think(self.a))
+            self._run_once()
         elif self.runtype == 'loop':
-            while True:
-                if self.a in ['x', 'q', 'exit', 'quit']:
-                    break
-                else:
-                    print(self._think(self.a))
-                    print(self._format("Try again, or you can enter 'x/q/exit/quit' to quit"))
-                    self.a = input()
-                    sleep(Bot.wait)
+            self._run_looped()
                 
 
 
 class HelloBot(Bot):
-    def __init__(self, runtype):
+    def __init__(self, runtype='once'):
         self.runtype = runtype
         self.q = "Hi, what is your name?"
 
@@ -82,7 +84,7 @@ class Garfield:
             bot.run()
 
 class CalBot(Bot):
-    def __init__(self, runtype):
+    def __init__(self, runtype='once'):
         self.runtype = runtype
         self.q = "Through recent upgrade I can do calculation now. Input some arithmetic expression to try:"
     
@@ -92,7 +94,7 @@ class CalBot(Bot):
 
 garfield = Garfield(1)
 
-garfield.add(HelloBot('once'))
+garfield.add(HelloBot())
 garfield.add(CalBot('loop'))
 
 garfield.run()
